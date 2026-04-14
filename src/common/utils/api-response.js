@@ -1,0 +1,34 @@
+class ApiResponse {
+  static ok(res, message = "Success", data = null) {
+    return res.status(200).json({
+      success: true,
+      message,
+      ...(data && { data }),
+      timestamp: new Date().toISOString(),
+    });
+  }
+
+  static created(res, message = "Resource created", data = null) {
+    return res.status(201).json({
+      success: true,
+      message,
+      ...(data && { data }),
+      timestamp: new Date().toISOString(),
+    });
+  }
+
+  static noContent(res) {
+    return res.status(204).send();
+  }
+
+  static success(res, message = "Resource created", data = null) {
+    return res.status(200).json({
+      success: true,
+      message,
+      ...(data && { data }),
+      timestamp: new Date().toISOString(),
+    });
+  }
+}
+
+export default ApiResponse;

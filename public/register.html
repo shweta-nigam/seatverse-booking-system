@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #1e293b;
+      padding: 30px;
+      border-radius: 12px;
+      width: 300px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: none;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #3b82f6;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #2563eb;
+    }
+
+    .error {
+      color: #f87171;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .success {
+      color: #4ade80;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .link {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .link a {
+      color: #38bdf8;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Register</h2>
+
+    <input type="text" id="name" placeholder="Name" />
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Password" />
+
+    <!-- Optional role -->
+    <select id="role">
+      <option value="user">User</option>
+      <option value="admin">Admin</option>
+    </select>
+
+    <button onclick="register()">Register</button>
+
+    <div class="error" id="error"></div>
+    <div class="success" id="success"></div>
+
+    <div class="link">
+      Already have an account? <a href="/login.html">Login</a>
+    </div>
+  </div>
+
+  <script>
+    async function register() {
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const role = document.getElementById("role").value;
+
+      const errorDiv = document.getElementById("error");
+      const successDiv = document.getElementById("success");
+
+      errorDiv.innerText = "";
+      successDiv.innerText = "";
+
+      try {
+        const res = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ name, email, password, role })
+        });
+
+        const data = await res.json();
+
+        console.log("data-----", data);
+        
+
+        if (!res.ok) {
+          errorDiv.innerText = data.message || "Registration failed";
+          return;
+        }
+
+        successDiv.innerText = "Registration successful! Redirecting...";
+
+        setTimeout(() => {
+          window.location.href = "/login.html";
+        }, 1500);
+
+      } catch (err) {
+        errorDiv.innerText = "Something went wrong";
+      }
+    }
+  </script>
+
+</body>
+</html>
